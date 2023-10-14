@@ -146,11 +146,14 @@ class Dataset(data.Dataset):
                 self.rgb_list_file = args.shRootDir + '/' + 'open_st_test.list'
             else:
                 self.rgb_list_file = 'list/shanghai-i3d-train-10crop.list'
-        else:
+        elif self.dataset =='ucf':
             if test_mode:
                 self.rgb_list_file = ucf_root_path + '/' + 'open_ucf_test.list'
             else:
                 self.rgb_list_file = 'list/ucf-i3d.list'
+        elif self.dataset =='cs':
+            self.rgb_list_file = args.csRootDir + '/' + 'open_cs_test.list'
+
 
         self.tranform = transform
         self.test_mode = test_mode

@@ -56,6 +56,9 @@ if __name__ == '__main__':
     #print(model)
     #for param_tensor in model.state_dict():
     #  print(param_tensor, "\t", model.state_dict()[param_tensor].size())
+    #print("Model's state_dict:")
+    #for param_tensor in model.state_dict():
+     #   print(param_tensor, "\t", model.state_dict()[param_tensor].size())
 
     print('Main args are ',args)
     auc = test(test_loader, model, args, viz, device)
