@@ -7,10 +7,16 @@ torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
 
 #sh_root_path = '/disk/zc/project/2021/bak/C3D_feature_extraction/C3D_Features_txt/Open_Filter/I3D/ST/new_data/t_0.75/'
-sh_root_path = '/content/drive/MyDrive/VAD_Code/VAD_Code/t_0.75/'
+#sh_root_path = '/content/drive/MyDrive/VAD_Code/VAD_Code/t_0.75/'
 #sh_tmp_dir = '/disk/zc/project/2021/bak/C3D_feature_extraction/C3D_Features_txt/Open_Filter/I3D_ST/open_maml/tmp_train_eval/'
-sh_tmp_dir = '/content/drive/MyDrive/VAD_Code/VAD_Code/ST_MLAD/temp/'
-ucf_tmp_dir = '/content/drive/MyDrive/VAD_Code/all_train/tmp_dir/'
+#sh_tmp_dir = '/content/drive/MyDrive/VAD_Code/VAD_Code/ST_MLAD/temp/'
+#ucf_tmp_dir = '/content/drive/MyDrive/VAD_Code/all_train/tmp_dir/'
+
+#sh_root_path = shRootDir
+#ucf_root_path = ucfRootDir
+#sh_tmp_dir = tempDir
+#ucf_tmp_dir = tempDir
+
 
 class MLAD_Dataset(data.Dataset):
     def __init__(self, args, is_meta_train, is_normal=True, transform=None, test_mode=False):
@@ -20,7 +26,7 @@ class MLAD_Dataset(data.Dataset):
         self.dataset = args.dataset
         if self.dataset == 'shanghai':
             if test_mode:
-                self.sh_test_rgb_list_file = sh_root_path + 'open_st_test.list'
+                self.sh_test_rgb_list_file = sh_root_path + '/' + 'open_st_test.list'
             else:
                 self.sh_meta_train_nor_rgb_list_file = sh_tmp_dir + 'meta_train/train_nor_list.list'
                 self.sh_meta_train_abnor_rgb_list_file = sh_tmp_dir + 'meta_train/train_abnor_list.list'
@@ -31,7 +37,7 @@ class MLAD_Dataset(data.Dataset):
                 
         else:
             if test_mode:
-                self.ucf_test_rgb_list_file = ucf_root_path + 'open_ucf_test.list'
+                self.ucf_test_rgb_list_file = ucf_root_path + '/' + 'open_ucf_test.list'
             else:
                 self.ucf_meta_train_nor_rgb_list_file = ucf_tmp_dir + 'meta_train/train_nor_list.list'
                 self.ucf_meta_train_abnor_rgb_list_file = ucf_tmp_dir + 'meta_train/train_abnor_list.list'
@@ -136,12 +142,13 @@ class Dataset(data.Dataset):
         self.dataset = args.dataset
         if self.dataset == 'shanghai':
             if test_mode:
-                self.rgb_list_file = sh_root_path + 'open_st_test.list'
+                #self.rgb_list_file = sh_root_path + '/' + 'open_st_test.list'
+                self.rgb_list_file = args.shRootDir + '/' + 'open_st_test.list'
             else:
                 self.rgb_list_file = 'list/shanghai-i3d-train-10crop.list'
         else:
             if test_mode:
-                self.rgb_list_file = ucf_root_path + 'open_ucf_test.list'
+                self.rgb_list_file = ucf_root_path + '/' + 'open_ucf_test.list'
             else:
                 self.rgb_list_file = 'list/ucf-i3d.list'
 

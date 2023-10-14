@@ -6,12 +6,13 @@ from model import Model
 from dataset import Dataset
 #from train import train
 from train import *
-from my_test_10crop import test,test_all
+from my_test_10crop import test,test_all2
 import option
 from tqdm import tqdm
 from utils import Visualizer
 from config import *
 import pickle
+import time
 
 
 print('here')
@@ -23,7 +24,7 @@ torch.backends.cudnn.deterministic = False
 torch.backends.cudnn.enabled=True
 
 #checkpoint_PATH = 'train_ckpt/st-i3d.pkl'
-checkpoint_PATH = '/content/drive/MyDrive/VAD_Code/VAD_Code/train_ckpt/st-i3d.pkl'
+#checkpoint_PATH = '/content/drive/MyDrive/VAD_Code/VAD_Code/train_ckpt/st-i3d.pkl'
                               
 def load_checkpoint(model, checkpoint_PATH):
     model.load_state_dict(torch.load(checkpoint_PATH))
@@ -33,6 +34,8 @@ if __name__ == '__main__':
     args = option.parser.parse_args()
     print('hello')
     config = Config(args)
+    checkpoint_PATH = args.chkptPath + '/' + 'st-i3d.pkl'
+    #time.sleep(50)
 
     test_loader = DataLoader(Dataset(args, test_mode=True),
                               batch_size=1, shuffle=False,
@@ -56,7 +59,7 @@ if __name__ == '__main__':
 
     print('Main args are ',args)
     auc = test(test_loader, model, args, viz, device)
-    all_auc = test_all(test_loader, model, args, viz, device)
+    all_auc = test_all2(test_loader, model, args, viz, device)
     print('all auc : ' + str(all_auc))
     
 

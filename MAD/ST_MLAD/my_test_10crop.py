@@ -10,16 +10,20 @@ import pickle
 print('In my test')
 
 #sh_root_path = '/disk/zc/project/2021/bak/C3D_feature_extraction/C3D_Features_txt/Open_Filter/I3D/ST/new_data/t_0.75/'
-sh_root_path = '/content/drive/MyDrive/VAD_Code/VAD_Code/t_0.75/'
-ucf_root_path = '/content/drive/MyDrive/VAD_Code/VAD_Code/t_0.75/'
-cs_root_path = '/content/drive/MyDrive/VAD_Code/VAD_Code/gt_workdir'
+#sh_root_path = '/content/drive/MyDrive/VAD_Code/VAD_Code/t_0.75/'
+#ucf_root_path = '/content/drive/MyDrive/VAD_Code/VAD_Code/t_0.75/'
+#cs_root_path = '/content/drive/MyDrive/VAD_Code/VAD_Code/gt_workdir'
+
+#sh_root_path = args.shRootDir
+#ucf_root_path = args.ucfRootDir
+#cs_root_path = args.csRootDir
 
 
 seen_or_open = 'open'
 
 #label_dict_path = '/disk/zc/dataset/ST_I3D_Fea/dataset_divide/'
 label_dict_path = '/content/drive/MyDrive/VAD_Code/VAD_Code/train_ckpt/'
-cs
+
 
 #with open(file=os.path.join(label_dict_path, 'video_label.pickle'), mode='rb') as f:
 #    video_label_dict = pickle.load(f)
@@ -123,12 +127,13 @@ def test_all(dataloader, model, args, viz, device):
     #open_pred = np.load('ucf_res/' + 'open_pred.npy')
     
     
-    seen_gt = np.load(sh_root_path + 'seen_st_gt.npy')
-    open_gt = np.load(sh_root_path + 'open_st_gt.npy')
+    seen_gt = np.load(sh_root_path + '/' + 'seen_st_gt.npy')
+    open_gt = np.load(sh_root_path + '/' + 'open_st_gt.npy')
     
     #seen_pred = np.load('/disk/zc/project/2021/bak/OpenSource/ICCV_21/My_RTFM/st_res/' + 'seen_pred.npy')
-    seen_pred = np.load('/content/drive/MyDrive/VAD_Code/VAD_Code/ST_MLAD/st_res/' + 'seen_pred.npy')
-    open_pred = np.load('st_res/' + 'open_pred.npy')
+    #seen_pred = np.load('/content/drive/MyDrive/VAD_Code/VAD_Code/ST_MLAD/st_res/' + 'seen_pred.npy')
+    seen_pred = np.load(resPath + '/' + 'seen_pred.npy')
+    open_pred = np.load(resPath + '/' + 'open_pred.npy')
     
     
     #all_gt = np.concatenate((seen_gt,open_gt))
@@ -144,15 +149,33 @@ def test_all(dataloader, model, args, viz, device):
     print('all auc : ' + str(rec_auc))
     return rec_auc
 
+def test_all2(dataloader, model, args, viz, device):
+    #gt1 = np.load(args.shRootDir + '/' + 'seen_st_gt.npy')
+    gt1 = np.load(args.shRootDir + '/' + 'open_st_gt.npy')
+    gt1 = list(gt1)
+
+    pred1 = np.load(args.resPath + '/' + 'open_pred.npy')
+    pred1 = list(pred1)
+
+    all_gt1 = gt1
+    all_pred = pred1
+    
+    fpr, tpr, threshold = roc_curve(list(all_gt1), all_pred)
+    np.save('fpr.npy', fpr)
+    np.save('tpr.npy', tpr)
+    rec_auc = auc(fpr, tpr)
+    print('all auc : ' + str(rec_auc))
+    return rec_auc
+
 def test(dataloader, model, args, viz, device):
     print('in test')
     print(args)
     if args.dataset == 'shanghai':
         #rgb_list_file ='/disk/zc/project/2021/bak/OpenSource/ICCV_21/RTFM-main/list/shanghai-i3d-test-10crop.list'
-        rgb_list_file = sh_root_path + seen_or_open + '_st_test.list'
+        rgb_list_file = args.shRootDir + '/' + seen_or_open + '_st_test.list'
     elif args.dataset == 'ucf':
         #rgb_list_file ='/disk/zc/project/2021/bak/OpenSource/ICCV_21/RTFM-main/list/ucf-i3d-test.list'
-        rgb_list_file = ucf_root_path + seen_or_open + '_ucf_test.list'
+        rgb_list_file = args.ucfRootDir + '/' + seen_or_open + '_ucf_test.list'
     
     file_list = list(open(rgb_list_file))
     o_video_label = [0] * len(file_list)
@@ -197,13 +220,16 @@ def test(dataloader, model, args, viz, device):
         print('final i ',i)
 
         if args.dataset == 'shanghai':
-            gt = np.load(sh_root_path + 'open_st_gt.npy')
+            #gt = np.load(sh_root_path + 'open_st_gt.npy')
+            gt = np.load(args.shRootDir + '/' + 'open_st_gt.npy')
             #print(gt)
             print(np.shape(gt))
-            save_path = 'st_res/' + 'open_pred.npy'
+            #save_path = 'st_res/' + 'open_pred.npy'
+            save_path = args.resPath + '/' + 'open_pred.npy'
         else:
-            gt = np.load(ucf_root_path + 'open_ucf_gt.npy')
-            save_path = 'ucf_res/' + 'open_pred.npy'
+            gt = np.load(ucf_root_path + '/' + 'open_ucf_gt.npy')
+            #save_path = 'ucf_res/' + 'open_pred.npy'
+            save_path = args.resPath + 'open_pred.npy'
 
         #print('gt shape:',gt.shape)
         #gt.reshape(-1,1)
