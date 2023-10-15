@@ -152,7 +152,8 @@ class Dataset(data.Dataset):
             else:
                 self.rgb_list_file = 'list/ucf-i3d.list'
         elif self.dataset =='cs':
-            self.rgb_list_file = args.csRootDir + '/' + 'open_cs_test.list'
+           # self.rgb_list_file = args.csRootDir + '/' + 'open_cs_test.list'
+           self.rgb_list_file = args.csRootDir + '/' + args.csfilelist
 
 
         self.tranform = transform

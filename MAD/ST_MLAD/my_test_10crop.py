@@ -158,10 +158,10 @@ def test_all2(dataloader, model, args, viz, device):
         pred = np.load(args.resPath + '/' + 'open_pred.npy')
         pred = list(pred)
     elif args.dataset=='cs':
-        gt = np.load(args.csRootDir + '/' + 'gt_cs.npy')
+        gt = np.load(args.csRootDir + '/' + args.csgt)
         gt = list(gt)  
 
-        pred = np.load(args.resPath + '/' + 'open_cspred.npy')
+        pred = np.load(args.resPath + '/' + args.savepred)
         pred = list(pred)
 
     all_gt1 = gt
@@ -185,7 +185,8 @@ def test(dataloader, model, args, viz, device):
         rgb_list_file = args.ucfRootDir + '/' + seen_or_open + '_ucf_test.list'
     elif args.dataset == 'cs':
         #rgb_list_file ='/disk/zc/project/2021/bak/OpenSource/ICCV_21/RTFM-main/list/ucf-i3d-test.list'
-        rgb_list_file = args.csRootDir + '/' + seen_or_open + '_cs_test.list'
+        #rgb_list_file = args.csRootDir + '/' + seen_or_open + '_cs_test.list'
+        rgb_list_file= args.csRootDir +'/'+args.csfilelist
     
     file_list = list(open(rgb_list_file))
     o_video_label = [0] * len(file_list)
@@ -242,9 +243,10 @@ def test(dataloader, model, args, viz, device):
             save_path = args.resPath + 'open_pred.npy'
         elif args.dataset=='cs':
             #gt = np.load(cs_root_path + '/' + 'open_ucf_gt.npy')
-             gt = np.load(args.csRootDir + '/' + 'gt_cs.npy')
+             #gt = np.load(args.csRootDir + '/' + 'gt_cs.npy')
+             gt= np.load(args.csRootDir + '/' + args.csgt)
             #save_path = 'ucf_res/' + 'open_pred.npy'
-             save_path = args.resPath + '/' + 'open_cspred.npy'
+             save_path = args.resPath + '/' + args.savepred
 
         #print('gt shape:',gt.shape)
         #gt.reshape(-1,1)
