@@ -43,13 +43,16 @@ def file_list_all(file_path):
     return file_list  
             
 def get_meta_train_list(class_index, tmp_dir, label_dir):
-    nor_label_file = label_dir + 'nor_path_label.txt'
-    abnor_label_file = label_dir + 'abnor_path_label.txt'
+    #nor_label_file = label_dir + 'nor_path_label.txt'
+    #abnor_label_file = label_dir + 'abnor_path_label.txt'
+
+    nor_label_file = os.path.join(label_dir, 'nor_path_label.txt')
+    abnor_label_file = os.path.join(label_dir, 'abnor_path_label.txt')
     
     if not os.path.exists(tmp_dir):
         os.mkdir(tmp_dir)
     
-    meta_train_dir = tmp_dir + 'meta_train/'
+    meta_train_dir = os.path.join(tmp_dir, 'meta_train')
     
     # This meta_train_dir is created for each ordered pair in meta train.
     # First component of class_index is nor label, second is abnor_label
@@ -87,12 +90,12 @@ def get_meta_train_list(class_index, tmp_dir, label_dir):
         #fea_path = fea_dir + fea_file_name
         #print('fea_file_name:',fea_file_name)
 
-        fea_path = split_nor_path
+        #fea_path = split_nor_path
         
         if split_nor_label == nor_train_index:
-            meta_train_nor.append(fea_path)
+            meta_train_nor.append(split_nor_path)
 
-    with open(meta_train_dir + 'train_nor_list.list', 'w+') as train_nor_list:
+    with open(os.path.join(meta_train_dir,'train_nor_list.list'), 'w+') as train_nor_list:
         for fea in meta_train_nor:
             newline = fea+'\n'
             train_nor_list.write(newline)
@@ -105,12 +108,12 @@ def get_meta_train_list(class_index, tmp_dir, label_dir):
         #fea_path = fea_dir + fea_file_name
         #print('fea_file_name:',fea_file_name)
 
-        fea_path = split_abnor_path
+        #fea_path = split_abnor_path
 
         if split_abnor_label == abnor_train_index:
-            meta_train_abnor.append(fea_path)   
+            meta_train_abnor.append(split_abnor_path)   
             
-    with open(meta_train_dir + 'train_abnor_list.list', 'w+') as train_abnor_list:
+    with open(os.path.join(meta_train_dir,'train_abnor_list.list'), 'w+') as train_abnor_list:
         for fea in meta_train_abnor:
             newline = fea+'\n'
             train_abnor_list.write(newline)
@@ -269,6 +272,7 @@ if __name__ == '__main__':
                 meta_train_class_index_list.append(nor_abnor_class[j])
         
         print('meta_train_class_index_list:',meta_train_class_index_list)
+        print('meta_train_class_index_list length:',len(meta_train_class_index_list))
         for index in range(0,len(meta_train_class_index_list)):
             get_meta_train_list(meta_train_class_index_list[index], tmp_dir, label_dir)
             

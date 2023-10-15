@@ -66,3 +66,33 @@ def gen_ground_truth(inputAnnotFile, outDir, outFile):
 
   print(gt)
   print('TotalFrames: ',totalFrames)
+
+
+# Function to generate text files for meta training. The output is a list of filepaths
+# for either normal or abnormal classes with its associated label. In training, normal videos are divided into
+# K classes and abnormal into L classes. So, if there are N_n normal videos and N_a abnormal videos, then 
+# there will be N_n/K and N_a/L normal and abnormal videos per class respectively, which will share the
+# same class label. For example, if there are 20 normal videos and we have K = 5 normal classes, then 4 videos 
+# per class will share the same label. The labels will be 0,1,2,3,4. Hence in the nor class label file,
+# there will be addresses of all these 20 videos, but next to each video will be its class label.
+# 4 videos will share the same label, then then next 4 share the same and so on.
+
+# Input: inPath -> global path of folder where npy feature files exist
+# numClass: Number of classes
+# firstLabel: Label of first class.
+# outFolder: Output file folder
+# outFileName: output file name
+
+def generate_class_labels(inPath, numClass, firstLabel, outFolder, outFileName):
+  outFilePath = os.path.join(outFolder, outFileName)
+  inFileList = os.listdir(inPath)
+  numInFiles = len(inFileList)
+  with open(outFilePath, 'w') as fp:
+    videosPerClass = numInFiles/numClass
+    label = firstLabel
+    for i in range(0,numInFiles):
+      addr1 = os.path.join(inPath,inFileList[i]) + ' ' + str(label)
+      print(addr1)
+      fp.write("%s\n" % addr1)
+      if (i+1)%videosPerClass==0:
+        label = label + 1
