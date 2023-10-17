@@ -65,6 +65,7 @@ def get_meta_train_list(class_index, tmp_dir, label_dir):
         
     nor_train_index = class_index[0]
     abnor_train_index = class_index[1]
+    print('abnor train index ',abnor_train_index)
     nor_label_list = file_list_all(nor_label_file)
     abnor_label_list = file_list_all(abnor_label_file)
     #print(type(nor_label_list[0]))
@@ -119,13 +120,17 @@ def get_meta_train_list(class_index, tmp_dir, label_dir):
             train_abnor_list.write(newline)
 
 def get_meta_eval_list(eval_index, tmp_dir, label_dir):
-    nor_label_file = label_dir + 'nor_path_label.txt'
-    abnor_label_file = label_dir + 'abnor_path_label.txt'
+    #nor_label_file = label_dir + 'nor_path_label.txt'
+    #abnor_label_file = label_dir + 'abnor_path_label.txt'
+    
+    nor_label_file = os.path.join(label_dir, 'nor_path_label.txt')
+    abnor_label_file = os.path.join(label_dir, 'abnor_path_label.txt')
     
     if not os.path.exists(tmp_dir):
         os.mkdir(tmp_dir)
     
-    meta_eval_dir = tmp_dir + 'meta_eval/'
+    #meta_eval_dir = tmp_dir + 'meta_eval/'
+    meta_eval_dir = os.path.join(tmp_dir,'meta_eval')
         
     if not os.path.exists(meta_eval_dir):
         os.mkdir(meta_eval_dir)
@@ -156,7 +161,7 @@ def get_meta_eval_list(eval_index, tmp_dir, label_dir):
             meta_eval_nor.append(fea_path)
             
     #with open(meta_eval_dir + 'eval_nor_list.list', 'wb') as eval_nor_list:
-    with open(meta_eval_dir + 'eval_nor_list.list', 'w+') as eval_nor_list:
+    with open(os.path.join(meta_eval_dir,'eval_nor_list.list'), 'w+') as eval_nor_list:
         for fea in meta_eval_nor:
             newline = fea+'\n'
             eval_nor_list.write(newline)
@@ -173,7 +178,7 @@ def get_meta_eval_list(eval_index, tmp_dir, label_dir):
         if split_abnor_label == abnor_eval_index[0] or split_abnor_label == abnor_eval_index[1]:
             meta_eval_abnor.append(fea_path)
 
-    with open(meta_eval_dir + 'eval_abnor_list.list', 'w+') as eval_abnor_list:
+    with open(os.path.join(meta_eval_dir,'eval_abnor_list.list'), 'w+') as eval_abnor_list:
         for fea in meta_eval_abnor:
             newline = fea+'\n'
             eval_abnor_list.write(newline)
@@ -188,17 +193,24 @@ if __name__ == '__main__':
     stop_gradient = False
     meta_val_beta = 0.1
     #train_res_dir = 'ST/I3D/' + str(iterations) + '/'
-    train_res_dir = 'train_check'
-    output_path = '/content/drive/MyDrive/VAD_Code/all_train/output_train'  # put your own path here
-    model_save_pth = '/content/drive/MyDrive/VAD_Code/all_train/model_train'
+    #train_res_dir = 'train_check'
+    #output_path = '/content/drive/MyDrive/VAD_Code/all_train/output_train'  # put your own path here
+    #model_save_pth = '/content/drive/MyDrive/VAD_Code/all_train/model_train'
+
+    train_res_dir = '/mnt/c/code/mad_project/MAD/ST_MLAD/all_train'
+    output_path = '/mnt/c/code/mad_project/MAD/ST_MLAD/all_train'
+    model_save_pth = '/mnt/c/code/mad_project/MAD/ST_MLAD/all_train'
     test_info = {"epoch": [], "test_AUC": [], "all_AUC": []}
     #divide meta train and meta eval
     #tmp_dir = '/disk/zc/project/2021/bak/C3D_feature_extraction/C3D_Features_txt/Open_Filter/I3D_ST/open_maml/tmp_train_eval/'
     #label_dir = '/disk/zc/project/2021/bak/C3D_feature_extraction/C3D_Features_txt/Open_Filter/I3D/ST/pre_process_res/'
     #fea_dir = '/disk/zc/dataset/ST_I3D_Fea/Train/'
 
-    tmp_dir = '/content/drive/MyDrive/VAD_Code/all_train/tmp_dir/'
-    label_dir = '/content/drive/MyDrive/VAD_Code/all_train/label_dir/'
+    #tmp_dir = '/content/drive/MyDrive/VAD_Code/all_train/tmp_dir/'
+    #label_dir = '/content/drive/MyDrive/VAD_Code/all_train/label_dir/'
+
+    tmp_dir = args.trainTempDir
+    label_dir = args.trainLabelDir
     #fea_dir 
     
     train_nor_class = ['0','1','2','3','4']
@@ -299,7 +311,7 @@ if __name__ == '__main__':
             #if (step - 1) % len(meta_train_aloader) == 0:
             loadera_iter = iter(meta_train_aloader)
             print('The len of loadera_iter:',len(loadera_iter))
-            print('loadern iter: ',loadera_iter)
+            print('loadera iter: ',loadera_iter)
                                
             loss = meta_train(loadern_iter, loadera_iter, model, args.batch_size, optimizer, viz, device, \
                                 meta_loss=None, meta_step_size=None, stop_gradient=False)
@@ -338,7 +350,7 @@ if __name__ == '__main__':
                 'meta_train_loss:', meta_train_loss.item(),
                 'meta_val_loss:', meta_val_loss.item())
                 
-    torch.save(model.state_dict(), model_save_pth  + args.model_name + 'final.pkl')
+    torch.save(model.state_dict(), os.path.join(model_save_pth,args.model_name,'final.pkl'))
     
             
             

@@ -27,4 +27,5 @@ parser.add_argument('--tempDir', type=str, default='/mnt/c/code/mad_project/MAD/
 parser.add_argument('--csfilelist', type=str, default='open_cs_test.list', help='temp dir')
 parser.add_argument('--csgt', type=str, default='gt_cs.npy', help='temp dir')
 parser.add_argument('--savepred', type=str, default='open_cspred.npy', help='temp dir')
-
+parser.add_argument('--trainTempDir', type=str, default='/mnt/c/code/mad_project/MAD/ST_MLAD/all_train/tmp_dir', help='temp dir')
+parser.add_argument('--trainLabelDir', type=str, default='/mnt/c/code/mad_project/MAD/ST_MLAD/all_train/label_dir', help='temp dir')

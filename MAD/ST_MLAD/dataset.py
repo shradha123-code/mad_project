@@ -3,6 +3,7 @@ import numpy as np
 from utils import process_feat
 import torch
 from torch.utils.data import DataLoader
+import os
 torch.set_default_tensor_type('torch.cuda.FloatTensor')
 
 
@@ -35,7 +36,7 @@ class MLAD_Dataset(data.Dataset):
                 
                 
                 
-        else:
+        elif self.dataset=='ucf':
             if test_mode:
                 self.ucf_test_rgb_list_file = ucf_root_path + '/' + 'open_ucf_test.list'
             else:
@@ -43,6 +44,14 @@ class MLAD_Dataset(data.Dataset):
                 self.ucf_meta_train_abnor_rgb_list_file = ucf_tmp_dir + 'meta_train/train_abnor_list.list'
                 self.ucf_meta_eval_nor_rgb_list_file = ucf_tmp_dir + 'meta_eval/eval_nor_list.list'
                 self.ucf_meta_eval_abnor_rgb_list_file = ucf_tmp_dir + 'meta_eval/eval_abnor_list.list'
+        elif self.dataset=='cs':
+            if test_mode:
+                self.cs_test_rgb_list_file = os.path.join(csRootDir,'open_cs_test.list')
+            else:
+                self.cs_meta_train_nor_rgb_list_file = os.path.join(args.trainTempDir, 'meta_train/train_nor_list.list')
+                self.cs_meta_train_abnor_rgb_list_file = os.path.join(args.trainTempDir, 'meta_train/train_abnor_list.list')
+                self.cs_meta_eval_nor_rgb_list_file = os.path.join(args.trainTempDir, 'meta_eval/eval_nor_list.list')
+                self.cs_meta_eval_abnor_rgb_list_file = os.path.join(args.trainTempDir, 'meta_eval/eval_abnor_list.list')
 
         self.tranform = transform
         self.test_mode = test_mode
@@ -94,6 +103,26 @@ class MLAD_Dataset(data.Dataset):
                     else: #meta eval
                         self.list = list(open(self.ucf_meta_eval_abnor_rgb_list_file))
                         print('abnormal list for ucf meta eval')
+                        #print(self.list)
+            elif self.dataset == 'cs':
+                if self.is_normal: 
+                    if self.is_meta_train: # meta train
+                        self.list = list(open(self.cs_meta_train_nor_rgb_list_file))
+                        print('normal list for vd meta train')
+                        #print(self.list)
+                    else: # meta eval
+                        self.list = list(open(self.cs_meta_eval_nor_rgb_list_file))
+                        print('normal list for cs meta eval')
+                        #print(self.list)
+                        
+                else: 
+                    if self.is_meta_train: #meta train
+                        self.list = list(open(self.cs_meta_train_abnor_rgb_list_file))
+                        print('abnormal list for cs meta train')
+                        #print(self.list)
+                    else: #meta eval
+                        self.list = list(open(self.cs_meta_eval_abnor_rgb_list_file))
+                        print('abnormal list for cs meta eval')
                         #print(self.list)
                         
 
