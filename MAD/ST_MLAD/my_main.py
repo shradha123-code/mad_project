@@ -34,7 +34,7 @@ if __name__ == '__main__':
     args = option.parser.parse_args()
     print('hello')
     config = Config(args)
-    checkpoint_PATH = args.chkptPath + '/' + 'st-i3d.pkl'
+    checkpoint_PATH = args.chkptPath + '/' + 'ucf_cs_train.pkl'
     #time.sleep(50)
 
     test_loader = DataLoader(Dataset(args, test_mode=True),

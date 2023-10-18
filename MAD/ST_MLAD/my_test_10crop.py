@@ -151,7 +151,7 @@ def test_all(dataloader, model, args, viz, device):
 
 def test_all2(dataloader, model, args, viz, device):
     #gt1 = np.load(args.shRootDir + '/' + 'seen_st_gt.npy')
-    if args.dataset=='shangahi':
+    if args.dataset=='shanghai':
         gt = np.load(args.shRootDir + '/' + 'open_st_gt.npy')
         gt = list(gt)
         
