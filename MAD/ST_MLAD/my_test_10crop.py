@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import torch
 from sklearn.metrics import auc, roc_curve, precision_recall_curve
 from sklearn.metrics import roc_auc_score, confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
 from utils import scorebinary, anomap, my_anomap
 import numpy as np
 import os
@@ -246,7 +249,8 @@ def test(dataloader, model, args, viz, device):
              #gt = np.load(args.csRootDir + '/' + 'gt_cs.npy')
              gt= np.load(args.csRootDir + '/' + args.csgt)
             #save_path = 'ucf_res/' + 'open_pred.npy'
-             save_path = args.resPath + '/' + args.savepred
+             args.savepred = 'cs_pred_' + str(args.trainPickleFile) + '.npy'
+             save_path = os.path.join(args.resPath,args.savepred)
 
         #print('gt shape:',gt.shape)
         #gt.reshape(-1,1)
@@ -256,11 +260,23 @@ def test(dataloader, model, args, viz, device):
         #pred.reshape(-1,1)
         #fpr, tpr, threshold = roc_curve(list(gt), pred[0:59552])
         fpr, tpr, threshold = roc_curve(list(gt), pred)
-        np.save('fpr.npy', fpr)
-        np.save('tpr.npy', tpr)
         rec_auc = auc(fpr, tpr)
+        #np.save('fpr.npy', fpr)
+       # np.save('tpr.npy', tpr)
+        fprName = 'fpr_' + str(args.trainPickleFile) + '.npy'
+        tprName = 'tpr_' + str(args.trainPickleFile) + '.npy'
+        fprPath = os.path.join(str(args.resPath),fprName)
+        tprPath = os.path.join(str(args.resPath),tprName)
+        print('acc', accuracy_score(list(gt), pred.round()))
+        print('precision', precision_score(list(gt), pred.round()))
+        print('recall', recall_score(list(gt), pred.round()))
+
+
+        
         #print('auc : ' + str(rec_auc))
         np.save(save_path, pred)
+        np.save(fprPath,fpr)
+        np.save(tprPath,tpr)
         
         return rec_auc
 

@@ -38,12 +38,12 @@ class MLAD_Dataset(data.Dataset):
                 
         elif self.dataset=='ucf':
             if test_mode:
-                self.ucf_test_rgb_list_file = ucf_root_path + '/' + 'open_ucf_test.list'
+                self.ucf_test_rgb_list_file = os.path.join(ucfRootDir, 'open_ucf_test.list')
             else:
-                self.ucf_meta_train_nor_rgb_list_file = ucf_tmp_dir + 'meta_train/train_nor_list.list'
-                self.ucf_meta_train_abnor_rgb_list_file = ucf_tmp_dir + 'meta_train/train_abnor_list.list'
-                self.ucf_meta_eval_nor_rgb_list_file = ucf_tmp_dir + 'meta_eval/eval_nor_list.list'
-                self.ucf_meta_eval_abnor_rgb_list_file = ucf_tmp_dir + 'meta_eval/eval_abnor_list.list'
+                self.ucf_meta_train_nor_rgb_list_file = os.path.join(args.trainTempDir, 'meta_train/train_nor_list.list')
+                self.ucf_meta_train_abnor_rgb_list_file = os.path.join(args.trainTempDir, 'meta_train/train_abnor_list.list')
+                self.ucf_meta_eval_nor_rgb_list_file = os.path.join(args.trainTempDir, 'meta_eval/eval_nor_list.list')
+                self.ucf_meta_eval_abnor_rgb_list_file = os.path.join(args.trainTempDir, 'meta_eval/eval_abnor_list.list')
         elif self.dataset=='cs':
             if test_mode:
                 self.cs_test_rgb_list_file = os.path.join(csRootDir,'open_cs_test.list')
@@ -177,7 +177,8 @@ class Dataset(data.Dataset):
                 self.rgb_list_file = 'list/shanghai-i3d-train-10crop.list'
         elif self.dataset =='ucf':
             if test_mode:
-                self.rgb_list_file = ucf_root_path + '/' + 'open_ucf_test.list'
+                #self.rgb_list_file = ucf_root_path + '/' + 'open_ucf_test.list'
+                self.rgb_list_file = args.ucfRootDir + '/' + args.csfilelist
             else:
                 self.rgb_list_file = 'list/ucf-i3d.list'
         elif self.dataset =='cs':

@@ -34,7 +34,9 @@ if __name__ == '__main__':
     args = option.parser.parse_args()
     print('hello')
     config = Config(args)
-    checkpoint_PATH = args.chkptPath + '/' + 'ucf_cs_train.pkl'
+    #checkpoint_PATH = args.chkptPath + '/' + 'ucf_cs_train.pkl'
+    checkpoint_PATH = args.chkptPath + '/' + args.trainPickleFile
+
     #time.sleep(50)
 
     test_loader = DataLoader(Dataset(args, test_mode=True),
@@ -62,7 +64,8 @@ if __name__ == '__main__':
 
     print('Main args are ',args)
     auc = test(test_loader, model, args, viz, device)
-    all_auc = test_all2(test_loader, model, args, viz, device)
-    print('all auc : ' + str(all_auc))
+    #all_auc = test_all2(test_loader, model, args, viz, device)
+    #print('all auc : ' + str(all_auc))
+    print('auc : ' + str(auc))
     
 
